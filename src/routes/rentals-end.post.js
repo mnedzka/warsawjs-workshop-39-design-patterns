@@ -1,13 +1,12 @@
 'use strict';
 
-const db = require('../db');
 const listPrice = require('../strategies/listPrice');
 
-module.exports = function(app) {
-  app.post('/rentals/:rental_id/end', async function(request, reply) {
+module.exports = function (app, { db }) {
+  app.post('/rentals/:rental_id/end', async function (request, reply) {
     // Retrieve the rental contract and figure out which car to put back:
     const rental_id = request.params.rental_id;
-    await db.transaction(async function(transaction) {
+    await db.transaction(async function (transaction) {
       const rental = await transaction('rentals')
         .first()
         .where({ rental_id: rental_id }).forUpdate();
